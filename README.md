@@ -73,7 +73,13 @@ Because I already knew Context API, learning Redux became easier and clearer.
  Redux Toolkit
  React Redux
  Tailwind CSS
+ ---
+ ## screenshot 
+ <img width="799" height="386" alt="image" src="https://github.com/user-attachments/assets/b7a19071-64ed-4514-95b0-1c11441eff10" />
 
+
+
+--
 ## Folder Structure (Learning-Oriented)
 ```
 src/
