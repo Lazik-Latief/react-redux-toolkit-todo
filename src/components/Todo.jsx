@@ -1,44 +1,98 @@
-import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import {removeTodo} from '../Features/todo/todoSlice';
+// React + useState for local UI state (editing)
+import React, { useState } from "react";
 
-function Todos() {  
+// useSelector → read data from Redux
+// useDispatch → send actions to Redux
+import { useSelector, useDispatch } from "react-redux";
+
+// Redux actions
+import { removeTodo, editTodo } from "../Features/todo/todoSlice";
+
+function Todos() {
+  // 🔹 Get todos array from Redux store
   const todos = useSelector((state) => state.todos);
+
+  // 🔹 Used to send actions (remove, edit) to Redux
   const dispatch = useDispatch();
 
+  // 🔹 Stores which todo is currently being edited
+  // null = no todo is being edited
+  const [editId, setEditId] = useState(null);
+
+  // 🔹 Stores temporary text while editing
+  // This is UI data, not Redux data
+  const [editText, setEditText] = useState("");
+
   return (
-     <>
-    <div>Todos</div>
-    <ul className="list-none">
+    <>
+      <div>Todos</div>
+
+      {/* List of todos */}
+      <ul className="list-none">
+        {/* Loop through each todo */}
         {todos.map((todo) => (
           <li
+            key={todo.id} // unique key for React
             className="mt-4 flex justify-between items-center bg-zinc-800 px-4 py-2 rounded"
-            key={todo.id}
           >
-            <div className='text-white'>{todo.text}</div>
-            <button
-             onClick={() => dispatch(removeTodo(todo.id))}
-              className="text-white bg-red-500 border-0 py-1 px-4 focus:outline-none hover:bg-red-600 rounded text-md"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-6 h-6"
+            {/* If this todo is in edit mode */}
+            {editId === todo.id ? (
+              // 🔹 Show input box when editing
+              <input
+                className="bg-zinc-700 text-white px-2 py-1 rounded"
+                value={editText} // controlled input
+                onChange={(e) => setEditText(e.target.value)} // update editText
+              />
+            ) : (
+              // 🔹 Show normal text when not editing
+              <div className="text-white">{todo.text}</div>
+            )}
+
+            {/* Buttons container */}
+            <div className="flex gap-2">
+              {/* If editing → show Save button */}
+              {editId === todo.id ? (
+                <button
+                  onClick={() => {
+                    // 🔹 Send updated text to Redux
+                    dispatch(editTodo({ id: todo.id, text: editText }));
+
+                    // 🔹 Exit edit mode
+                    setEditId(null);
+                  }}
+                  className="text-white bg-green-500 px-4 py-1 rounded"
+                >
+                  Save
+                </button>
+              ) : (
+                // 🔹 If not editing → show Edit button
+                <button
+                  onClick={() => {
+                    // 🔹 Enter edit mode for this todo
+                    setEditId(todo.id);
+
+                    // 🔹 Put existing text into input
+                    setEditText(todo.text);
+                  }}
+                  className="text-white bg-blue-500 px-4 py-1 rounded"
+                >
+                  Edit
+                </button>
+              )}
+
+              {/* 🔹 Delete todo button */}
+              <button
+                onClick={() => dispatch(removeTodo(todo.id))}
+                className="text-white bg-red-500 px-4 py-1 rounded"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
-                />
-              </svg>
-            </button>
+                Delete
+              </button>
+            </div>
           </li>
         ))}
       </ul>
     </>
-  )
+  );
 }
+
 export default Todos;

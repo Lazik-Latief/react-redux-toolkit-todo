@@ -99,12 +99,17 @@ Redux Toolkit removes unnecessary complexity
 State logic should live outside components
 Rebuilding the same project using different tools improves understanding
 
-## Practice > tutorials
-Future Learning Goals
-Learn async Redux using createAsyncThunk
-Connect Redux with APIs
-Use Redux DevTools properly
-Apply Redux in real projects (auth, cart, dashboard)
+## Updates : 
+
+- Added **Redux Toolkit** for state management.  
+- Implemented **Add Todo**, **Edit Todo**, and **Delete Todo** functionality.  
+- Added **input validation** to prevent empty todos.  
+- Improved **UI with Tailwind CSS**:  
+  - Clean card-style layout for todo list  
+  - Responsive design  
+  - Styled buttons for Add, Edit, Delete actions  
+- Added **inline editing** for todos with Save button.  
+- Added **simple comments** in code for better understanding and learning.
 
 ## About Me
 ## Lazik Latief
